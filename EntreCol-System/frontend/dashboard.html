@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EntreCOL+ | Panel</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="app-body">
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark small">E+</div>
+      <div>
+        <strong>EntreCOL<span>+</span></strong>
+        <small>ColPlus-Solutions</small>
+      </div>
+    </div>
+    <nav class="nav" id="nav">
+      <p class="nav-group">Reportes</p>
+      <button type="button" class="nav-item active" data-view="nomina">Reporte Nómina</button>
+      <button type="button" class="nav-item" data-view="info">Información Personal</button>
+      <button type="button" class="nav-item" data-view="salud">Salud y Pensión</button>
+      <button type="button" class="nav-item" data-view="novedades">Novedades</button>
+      <button type="button" class="nav-item" data-view="entretenimiento">Base-Entretenimiento</button>
+      <p class="nav-group">Administración</p>
+      <button type="button" class="nav-item" data-view="crud">Gestión CRUD</button>
+      <button type="button" class="nav-item" data-view="etl">Carga Masiva ETL</button>
+      <button type="button" class="nav-item" data-view="auditoria">Auditoría y Trazabilidad</button>
+    </nav>
+  </aside>
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <div class="main">
+    <header class="topbar">
+      <button type="button" class="btn btn-ghost menu-btn" id="menuBtn" aria-label="Abrir menú">Menú</button>
+      <h2 id="viewTitle">Reporte Nómina</h2>
+      <div class="topbar-user">
+        <div class="user-chip">
+          <span class="avatar" id="userAvatar">U</span>
+          <span class="user-meta"><strong id="userName">usuario</strong><small id="userRole">rol</small></span>
+        </div>
+        <button type="button" class="btn btn-outline" id="logoutBtn">Cerrar Sesión</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="view active" id="view-nomina">
+        <div class="toolbar">
+          <label class="inline-field"><span>Orden</span>
+            <select id="nominaOrden"><option value="ASC">ASC</option><option value="DESC">DESC</option></select>
+          </label>
+          <button type="button" class="btn btn-primary" id="nominaLoad">Consultar</button>
+          <button type="button" class="btn btn-accent push-right" id="nominaPdf">Vista Previa / Imprimir PDF</button>
+        </div>
+        <div class="kpis" id="nominaKpi"></div>
+        <div class="grid-2">
+          <article class="card"><h3>Empleados por dependencia</h3><div class="chart-wrap"><canvas id="chartNominaPie"></canvas></div></article>
+          <article class="card"><h3>Dependencia por cargo</h3><div class="chart-wrap"><canvas id="chartNominaBars"></canvas></div></article>
+        </div>
+        <article class="card"><h3>Listado general de empleados</h3><div id="nominaGeneral"></div></article>
+        <article class="card"><h3>Agrupado por dependencia</h3><div id="nominaDep"></div></article>
+        <article class="card"><h3>Agrupado por dependencia y cargo</h3><div id="nominaDepCargo"></div></article>
+      </section>
+
+      <section class="view" id="view-info">
+        <div class="toolbar">
+          <label class="inline-field grow"><span>Nombre o código personal</span>
+            <input type="search" id="infoBusqueda" placeholder="Ej. María Pérez o 1001">
+          </label>
+          <button type="button" class="btn btn-primary" id="infoBuscar">Buscar</button>
+          <button type="button" class="btn btn-accent push-right" id="infoPdf">Vista Previa / Imprimir PDF</button>
+        </div>
+        <article class="card"><h3>Resultados</h3><div id="infoLista"></div></article>
+        <article class="card"><h3>Ficha individual</h3><div id="infoFicha"></div></article>
+        <article class="card"><h3>Discriminación de novedades</h3><div id="infoNovedades"></div></article>
+      </section>
+
+      <section class="view" id="view-salud">
+        <div class="toolbar">
+          <label class="inline-field"><span>Orden</span>
+            <select id="saludOrden"><option value="ASC">ASC</option><option value="DESC">DESC</option></select>
+          </label>
+          <button type="button" class="btn btn-primary" id="saludLoad">Consultar</button>
+          <button type="button" class="btn btn-accent push-right" id="saludPdf">Vista Previa / Imprimir PDF</button>
+        </div>
+        <div class="grid-2">
+          <article class="card"><h3>Frecuencia general EPS</h3><div class="chart-wrap"><canvas id="chartEpsPie"></canvas></div></article>
+          <article class="card"><h3>Frecuencia general Pensión</h3><div class="chart-wrap"><canvas id="chartPensionPie"></canvas></div></article>
+          <article class="card"><h3>EPS por dependencia</h3><div class="chart-wrap"><canvas id="chartEpsDep"></canvas></div></article>
+          <article class="card"><h3>Pensión por dependencia</h3><div class="chart-wrap"><canvas id="chartPensionDep"></canvas></div></article>
+        </div>
+        <article class="card"><h3>Empleados por Cargo y EPS</h3><div id="saludCargoEps"></div></article>
+        <article class="card"><h3>Empleados por Cargo y Pensión</h3><div id="saludCargoPension"></div></article>
+      </section>
+
+      <section class="view" id="view-novedades">
+        <form class="toolbar" id="novForm" novalidate>
+          <label class="inline-field"><span>F1 (MM/AAAA)</span>
+            <input type="text" id="novF1" required placeholder="01/2026" maxlength="7" inputmode="numeric" pattern="(0[1-9]|1[0-2])/[0-9]{4}">
+          </label>
+          <label class="inline-field"><span>F2 (MM/AAAA)</span>
+            <input type="text" id="novF2" required placeholder="06/2026" maxlength="7" inputmode="numeric" pattern="(0[1-9]|1[0-2])/[0-9]{4}">
+          </label>
+          <button type="submit" class="btn btn-primary">Consultar</button>
+          <button type="button" class="btn btn-accent push-right" id="novPdf">Vista Previa / Imprimir PDF</button>
+        </form>
+        <div class="kpis" id="novKpi"></div>
+        <article class="card"><h3>Empleados con novedades</h3><div id="novEmpleados"></div></article>
+        <article class="card"><h3>Conteo por dependencia y cargo</h3><div id="novDepCargo"></div></article>
+        <article class="card"><h3>Detalle de novedades</h3><div id="novDetalle"></div></article>
+      </section>
+
+      <section class="view" id="view-entretenimiento">
+        <div class="toolbar">
+          <label class="inline-field"><span>Orden</span>
+            <select id="entOrden"><option value="ASC">ASC</option><option value="DESC">DESC</option></select>
+          </label>
+          <button type="button" class="btn btn-primary" id="entLoadAll">Actualizar todo</button>
+          <button type="button" class="btn btn-accent push-right" id="entPdf">Vista Previa / Imprimir PDF</button>
+        </div>
+        <div class="kpis" id="entKpi"></div>
+
+        <article class="card">
+          <h3>Películas por género y fechas</h3>
+          <form class="toolbar flush" id="entFormPeliculas" novalidate>
+            <label class="inline-field"><span>Género</span><select id="entGenero"></select></label>
+            <label class="inline-field"><span>F1</span><input type="date" id="entF1" value="1990-01-01"></label>
+            <label class="inline-field"><span>F2</span><input type="date" id="entF2" value="2030-12-31"></label>
+            <button type="submit" class="btn btn-primary">Consultar</button>
+          </form>
+          <div id="entPeliculas"></div>
+        </article>
+
+        <article class="card">
+          <h3>Top N libros mejor calificados</h3>
+          <form class="toolbar flush" id="entFormTop" novalidate>
+            <label class="inline-field"><span>N</span><input type="number" id="entN" min="1" max="1000" value="10"></label>
+            <button type="submit" class="btn btn-primary">Consultar</button>
+          </form>
+          <div id="entTopLibros"></div>
+        </article>
+
+        <div class="grid-2">
+          <article class="card"><h3>Top 5 mejor rating por año</h3><div id="entMejores"></div></article>
+          <article class="card"><h3>Top 5 peor rating por año</h3><div id="entPeores"></div></article>
+        </div>
+
+        <article class="card">
+          <h3>Películas con exactamente N géneros</h3>
+          <form class="toolbar flush" id="entFormGeneros" novalidate>
+            <label class="inline-field"><span>N</span><input type="number" id="entNGeneros" min="0" max="1000" value="3"></label>
+            <button type="submit" class="btn btn-primary">Consultar</button>
+          </form>
+          <div id="entNGenerosTabla"></div>
+        </article>
+
+        <div class="grid-2">
+          <article class="card"><h3>Frecuencia de películas por género</h3><div class="chart-wrap"><canvas id="chartGeneros"></canvas></div></article>
+          <article class="card">
+            <h3>Frecuencia de libros por año</h3>
+            <form class="toolbar flush" id="entFormAnios" novalidate>
+              <label class="inline-field"><span>F1 (año)</span><input type="number" id="entAnio1" min="1" max="9999" placeholder="1990"></label>
+              <label class="inline-field"><span>F2 (año)</span><input type="number" id="entAnio2" min="1" max="9999" placeholder="2025"></label>
+              <button type="submit" class="btn btn-primary">Graficar</button>
+            </form>
+            <div class="chart-wrap"><canvas id="chartLibrosAnio"></canvas></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-crud">
+        <div class="tabs tabs-row" id="crudEntities">
+          <button type="button" class="tab active" data-entity="empleados">Empleados</button>
+          <button type="button" class="tab" data-entity="novedades">Novedades</button>
+          <button type="button" class="tab" data-entity="peliculas">Películas</button>
+          <button type="button" class="tab" data-entity="libros">Libros</button>
+        </div>
+        <div class="tabs tabs-row tabs-sub" id="crudActions">
+          <button type="button" class="tab active" data-action="crear">Crear</button>
+          <button type="button" class="tab" data-action="listar">Listar</button>
+          <button type="button" class="tab" data-action="editar">Editar</button>
+          <button type="button" class="tab" data-action="eliminar">Eliminar</button>
+        </div>
+        <article class="card" id="crudPanel"></article>
+      </section>
+
+      <section class="view" id="view-etl">
+        <article class="card">
+          <h3>Carga masiva de archivos</h3>
+          <p class="muted">Formatos admitidos: <code>.xlsx</code> (nómina), <code>.dat</code> (películas) y <code>.json</code> (libros).</p>
+          <form id="etlForm" class="toolbar flush" novalidate>
+            <input type="file" id="etlFile" accept=".xlsx,.dat,.json">
+            <button type="submit" class="btn btn-primary" id="etlSubmit">Procesar archivo</button>
+          </form>
+          <div id="etlResult"></div>
+        </article>
+        <article class="card"><h3>Historial reciente de cargas</h3><div id="etlHistory"></div></article>
+      </section>
+
+      <section class="view" id="view-auditoria">
+        <div class="toolbar">
+          <button type="button" class="btn btn-primary" id="auditRefresh">Actualizar</button>
+          <label class="check"><input type="checkbox" id="auditAuto" checked><span>Actualización automática (10 s)</span></label>
+          <span class="muted push-right" id="auditStamp"></span>
+        </div>
+        <article class="card"><h3>Registro de auditoría</h3><div id="auditTable"></div></article>
+        <article class="card"><h3>Historial de archivos</h3><div id="archivosTable"></div></article>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div class="modal hidden" id="pdfModal" role="dialog" aria-modal="true" aria-labelledby="pdfTitle">
+  <div class="modal-box modal-wide">
+    <div class="modal-head">
+      <h3 id="pdfTitle">Vista previa del reporte</h3>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-primary" id="pdfPrint">Imprimir</button>
+        <button type="button" class="btn btn-accent" id="pdfDownload">Descargar</button>
+        <button type="button" class="btn btn-ghost" id="pdfClose">Cerrar</button>
+      </div>
+    </div>
+    <div class="pdf-frame">
+      <div class="pdf-loading" id="pdfLoading">Generando PDF...</div>
+      <iframe id="pdfViewer" title="Vista previa PDF"></iframe>
+    </div>
+  </div>
+</div>
+
+<div class="modal hidden" id="confirmModal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <h3 id="confirmTitle">Confirmar</h3>
+    <p id="confirmText"></p>
+    <div class="modal-actions end">
+      <button type="button" class="btn btn-ghost" id="confirmNo">Cancelar</button>
+      <button type="button" class="btn btn-danger" id="confirmYes">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script type="module" src="assets/js/reports.js"></script>
+</body>
+</html>

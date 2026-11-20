@@ -1,0 +1,9 @@
+flask
+flask-cors
+mysql-connector-python
+pandas
+openpyxl
+bcrypt
+PyJWT
+python-dotenv
+fpdf2

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EntreCOL+ | Acceso</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="auth-body">
+<main class="auth-shell">
+  <section class="auth-brand">
+    <div class="brand-mark">E+</div>
+    <h1>EntreCOL<span>+</span></h1>
+    <p class="brand-sub">ColPlus-Solutions</p>
+    <p class="brand-text">Plataforma corporativa de nómina, entretenimiento, auditoría y trazabilidad de datos.</p>
+    <ul class="brand-list">
+      <li>Reportes gerenciales con gráficos interactivos</li>
+      <li>Gestión de empleados, novedades, películas y libros</li>
+      <li>Carga masiva ETL con control de errores</li>
+      <li>Auditoría completa de cada operación</li>
+    </ul>
+  </section>
+  <section class="auth-card">
+    <div class="tabs" role="tablist">
+      <button type="button" class="tab active" id="tabLogin" role="tab" data-tab="login">Iniciar sesión</button>
+      <button type="button" class="tab" id="tabRegister" role="tab" data-tab="register">Registrarse</button>
+    </div>
+    <div id="authAlert" class="alert hidden" role="alert"></div>
+
+    <form id="loginForm" novalidate autocomplete="on">
+      <label class="field">
+        <span>Usuario</span>
+        <input type="text" id="loginUsername" name="username" autocomplete="username" required placeholder="admin">
+      </label>
+      <label class="field">
+        <span>Contraseña</span>
+        <input type="password" id="loginPassword" name="password" autocomplete="current-password" required placeholder="••••••••">
+      </label>
+      <div class="field">
+        <span>Verificación CAPTCHA</span>
+        <div class="captcha-row">
+          <div class="captcha-box"><img id="captchaImg" alt="Imagen CAPTCHA" width="180" height="60"></div>
+          <button type="button" id="captchaReload" class="btn btn-ghost" title="Recargar CAPTCHA">Recargar</button>
+        </div>
+        <input type="text" id="loginCaptcha" name="captcha" autocomplete="off" required maxlength="8" placeholder="Escriba los caracteres de la imagen">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="loginSubmit">Ingresar</button>
+    </form>
+
+    <form id="registerForm" class="hidden" novalidate autocomplete="off">
+      <label class="field">
+        <span>Usuario</span>
+        <input type="text" id="regUsername" name="username" required minlength="3" maxlength="50" placeholder="Letras, números, . _ -">
+      </label>
+      <label class="field">
+        <span>Contraseña</span>
+        <input type="password" id="regPassword" name="password" required minlength="8" maxlength="72" placeholder="Mínimo 8 caracteres">
+      </label>
+      <label class="field">
+        <span>Confirmar contraseña</span>
+        <input type="password" id="regPassword2" name="password2" required minlength="8" maxlength="72">
+      </label>
+      <button type="submit" class="btn btn-primary btn-block" id="registerSubmit">Crear cuenta</button>
+    </form>
+  </section>
+</main>
+<script type="module" src="assets/js/auth.js"></script>
+</body>
+</html>
